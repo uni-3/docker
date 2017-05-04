@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+   mysql:
+     image: mysql:latest
+     volumes:
+       - ./db_data:/var/lib/mysql
+     env_file: .env
+     networks:
+       - default
+     restart: always
+   web:
+     depends_on:
+       - mysql
+     build: ./
+     ports:
+       - "10100:80"
+       - "22002:22"
+     environment:
+       MYSQL_DB_HOST: mysql:3306
+     volumes:
+       - /var/www/html
+       - ./content:/root/drupal
+     env_file: .env
+     external_links:
+       - mysql:mysql
+     restart: always
+volumes:
+    db_data:

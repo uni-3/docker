@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+   mysql:
+     image: mysql:latest
+     volumes:
+       - ./db_data:/var/lib/mysql
+     restart: always
+     env_file:  .env
+
+   superset:
+     depends_on:
+       - mysql
+     build: ./
+     ports:
+       - "8088:80"
+       - "22001:22"
+     restart: always
+     environment:
+       MYSQL_HOST: mysql:3306
+volumes:
+    db_data:
