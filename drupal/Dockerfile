@@ -1,6 +1,5 @@
 FROM drupal:7.54-apache
 
-RUN ln -s /var/www/html /root/drupal
 
 RUN apt-get upgrade
 RUN apt-get update
@@ -52,3 +51,6 @@ RUN chmod 777 sites/default/files/
 RUN wget -qO- -O tmp.zip https://ftp.drupal.org/files/projects/l10n_update-7.x-2.1.zip \
 && unzip tmp.zip && rm tmp.zip \
 && mv l10n_update sites/all/modules/
+
+
+RUN ln -s /var/www/html /root/drupal
