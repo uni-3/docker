@@ -3,7 +3,6 @@ FROM wordpress:latest
 RUN apt-get upgrade
 RUN apt-get update
 RUN apt-get -y install wget unzip openssh-server curl rsync
-RUN git clone --branch master https://github.com/nuams/dkan-drops-7.git dkan
 RUN service apache2 start
 
 
