@@ -26,7 +26,19 @@ services:
      env_file:  .env
      external_links:
        - db:db
+   phpmyadmin:
+     depends_on:
+       - db
+     image: phpmyadmin/phpmyadmin
+     environment:
+        PMA_HOST: db
+        PMA_PORT: 3306
+     ports:
+         - 9091:80
+     volumes:
+         - phpmyadmin_data:/sessions
 volumes:
     db_data:
     wordpress:
+    phpmyadmin_data
 
