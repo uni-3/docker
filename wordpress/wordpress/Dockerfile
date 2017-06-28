@@ -7,11 +7,12 @@ RUN service apache2 start
 
 
 # wordmove
-RUN apt-get -y install ruby
-RUN gem install wordmove
-ENV RUBYOPT="-KU -E utf-8:utf-8"
+#RUN apt-get -y install ruby
+#RUN gem install wordmove
+#ENV RUBYOPT="-KU -E utf-8:utf-8"
 
-RUN ln -s /var/www/html /root/wordpress
+#RUN ln -s /var/www/html /root/wordpress
+RUN ln -s /usr/src/wordpress/* /var/www/html
 
 # ssh
 RUN mkdir /var/run/sshd

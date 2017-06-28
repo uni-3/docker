@@ -9,7 +9,7 @@ services:
      env_file:  .env
      networks:
        - default
-   wordpress:
+   app:
      depends_on:
        - db
      build: ./
@@ -20,8 +20,8 @@ services:
      #restart: always
      environment:
        WORDPRESS_DB_HOST: db:3306
-     volumes:
-       - ./wordpress:/var/www/html
+     #volumes:
+     #  - ./wordpress:/var/www/html
      #  WORDPRESS_DB_PASSWORD: wordpress
      env_file:  .env
      external_links:
@@ -40,5 +40,5 @@ services:
 volumes:
     db_data:
     wordpress:
-    phpmyadmin_data
+    phpmyadmin_data:
 
