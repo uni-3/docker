@@ -21,11 +21,12 @@ services:
      environment:
        WORDPRESS_DB_HOST: db:3306
      volumes:
-       - ./..:/var/www/html
+       - ./wordpress:/var/www/html
      #  WORDPRESS_DB_PASSWORD: wordpress
      env_file:  .env
      external_links:
        - db:db
 volumes:
     db_data:
+    wordpress:
 

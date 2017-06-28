@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  app:
+    image: 'golang:1.9'
+    volumes:
+       - ~/share/docker:/go/share
+    ports:
+      - '8080:8080'
+    tty: true
+    #command: 'go run main.go'
+
+volumes:
+  data:
+    driver: 'local'
+
