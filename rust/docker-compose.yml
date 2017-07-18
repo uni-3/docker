@@ -1,0 +1,12 @@
+version: '2'
+services:
+  app:
+    image: 'jimmycuadra/rust:latest'
+    volumes:
+      - ~/share/docker:/source
+    ports:
+      - 7000:7000
+    tty: true
+volumes:
+  data:
+    driver: 'local'

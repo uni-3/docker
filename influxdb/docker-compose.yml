@@ -1,0 +1,37 @@
+influxdb:
+        #restart: always
+  image: tutum/influxdb
+  volumes:
+    - ./influxdb:/data
+  environment:
+    - PRE_CREATE_DB=influxdb
+  ports:
+    - "8083:8083"
+    - "8086:8086"
+elastic:
+        #restart: always
+  image: tutum/elasticsearch
+  volumes:
+    - ./elastic:/usr/share/elasticsearch/data
+  environment:
+    - ELASTICSEARCH_USER=admin
+    - ELASTICSEARCH_PASS=admin
+  ports:
+    - "9200:9200"
+grafana:
+        #restart: always
+  image: tutum/grafana
+  ports:
+    - "8080:80"
+  environment:
+    - INFLUXDB_PROTO=http
+    - INFLUXDB_HOST=influxdb
+    - INFLUXDB_PORT=8086
+    - INFLUXDB_NAME=test
+    - INFLUXDB_USER=root
+    - INFLUXDB_PASS=root
+    - ELASTICSEARCH_PROTO=http
+    - ELASTICSEARCH_HOST=elastic
+    - ELASTICSEARCH_PORT=9200
+    - ELASTICSEARCH_USER=admin
+    - ELASTICSEARCH_PASS=admin
