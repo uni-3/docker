@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  app:
+    image: haskell:latest
+    volumes:
+       - ~/share/docker:/share
+    ports:
+      - '6060:6060'
+    tty: true
+
+volumes:
+  data:
+    driver: 'local'
+
