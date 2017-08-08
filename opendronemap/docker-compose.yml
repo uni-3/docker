@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  app:
+    image: opendronemap/opendronemap
+    #ports:
+    #  - "4567-4582:4567-4582"
+    #  - "18080:8080"
+    volumes:
+       - ./code/20170710_Z3-01/images:/code/images
+       - ./code/20170710_Z3-01/odm_orthophoto:/code/odm_orthophoto
+       #- ./code/20170710_Z3-01/odm_texturing:/code/odm_texturing
+       #- ./code/20170710_Z3-01/odm_meshing:/code/odm_meshing
