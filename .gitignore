@@ -3,3 +3,5 @@ wordpress/*
 .DS_Store
 db*
 *.txt
+node_modules
+
