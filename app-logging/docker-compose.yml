@@ -1,0 +1,38 @@
+version: "3"
+services:
+  # app
+  node:
+    build: node
+
+  nginx:
+    build: nginx
+    ports:
+      - "8888:80"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        tag: "docker.{{.FullID}}"
+
+  # logging
+  fluentd:
+    build: fluentd
+    volumes:
+      - ./fluentd:/fluentd/etc
+      - ./log:/fluentd/log
+    ports:
+      - "24224:24224"
+
+  # store log
+  elasticsearch:
+    image: elasticsearch
+    #restart: always
+    ports:
+      - "9200:9200"
+
+  # view log
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+
