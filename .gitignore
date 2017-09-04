@@ -4,4 +4,4 @@ wordpress/*
 db*
 *.txt
 node_modules
-
+log
