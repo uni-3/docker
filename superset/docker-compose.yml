@@ -5,7 +5,7 @@ services:
      image: mysql:latest
      volumes:
        - ./db_data:/var/lib/mysql
-     restart: always
+     #restart: always
      env_file:  .env
 
    superset:
@@ -15,7 +15,7 @@ services:
      ports:
        - "8088:80"
        - "22001:22"
-     restart: always
+     #restart: always
      environment:
        MYSQL_HOST: mysql:3306
 volumes:
