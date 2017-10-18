@@ -1,0 +1,28 @@
+version: "3"
+services:
+  # logging
+  fluentd:
+    build: fluentd
+    env_file: ./.env
+    volumes:
+      - ./fluentd:/fluentd/etc
+      - ./log:/fluentd/log
+    ports:
+      - "24224:24224"
+
+  # store log
+  elasticsearch:
+    image: elasticsearch
+    #restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - "http.host=0.0.0.0"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # usage cpu
+      - "bootstrap.memory_lock=true"
+
+  # view log
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
