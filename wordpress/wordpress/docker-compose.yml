@@ -20,8 +20,8 @@ services:
      #restart: always
      environment:
        WORDPRESS_DB_HOST: db:3306
-     #volumes:
-     #  - ./wordpress:/var/www/html
+     volumes:
+       - ./wordpress:/var/www/html
      #  WORDPRESS_DB_PASSWORD: wordpress
      env_file:  .env
      external_links:
