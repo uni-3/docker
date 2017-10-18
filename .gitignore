@@ -5,3 +5,5 @@ db*
 *.txt
 node_modules
 log
+logs
+.env
