@@ -2,25 +2,37 @@ version: "3"
 services:
   # logging
   fluentd:
-    build: fluentd
+    build: ./fluentd
     env_file: ./.env
     volumes:
-      - ./fluentd:/fluentd/etc
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
       - ./log:/fluentd/log
     ports:
-      - "24224:24224"
-
+      - 24224:24224
   # store log
   elasticsearch:
-    image: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.1
     #restart: always
     ports:
-      - "9200:9200"
+      - 9200:9200
+      - 9300:9300
     environment:
-      - "http.host=0.0.0.0"
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # usage cpu
-      - "bootstrap.memory_lock=true"
-
+      # セキュリティ設定を無効にする
+      - xpack.security.enabled=false
+      # http アクセスを制限しない
+      - http.host=0.0.0.0
+      # elasticsearch-head 用
+      # クロスドメインアクセスを許可することでWEBブラウザから直接クエリを実行できる
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m # usage cpu
+      #- bootstrap.system_call_filter=false
+      - bootstrap.memory_lock=false
+  # elastic search gui
+  elasticsearch-head:
+    image: mobz/elasticsearch-head:5
+    ports:
+      - 9100:9100
   # view log
   kibana:
     image: kibana
