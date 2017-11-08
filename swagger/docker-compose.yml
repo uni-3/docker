@@ -1,0 +1,7 @@
+version: "3"
+services:
+  # swagger_editor
+  fluentd:
+    image: swaggerapi/swagger-editor
+    ports:
+      - 28080:8080
