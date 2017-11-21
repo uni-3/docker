@@ -7,3 +7,10 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# using composer in root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+# create larabel project
+RUN composer create-project laravel/laravel ${PROJECT_NAME} --prefer-dist
+RUN cd ${PROJECT_NAME}
+# RUN composer install
