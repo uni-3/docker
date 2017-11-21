@@ -12,7 +12,7 @@ RUN service apache2 start
 #ENV RUBYOPT="-KU -E utf-8:utf-8"
 
 #RUN ln -s /var/www/html /root/wordpress
-RUN ln -s /usr/src/wordpress/* /var/www/html
+#RUN ln -s /usr/src/wordpress/* /var/www/html
 
 # ssh
 RUN mkdir /var/run/sshd
