@@ -8,9 +8,21 @@ RUN apt-get update && apt-get install -y \
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+
+### install laravel not working... ###
 # using composer in root
-ENV COMPOSER_ALLOW_SUPERUSER=1
+#ENV COMPOSER_ALLOW_SUPERUSER=1
 # create larabel project
-RUN composer create-project laravel/laravel ${PROJECT_NAME} --prefer-dist
-RUN cd ${PROJECT_NAME}
-# RUN composer install
+#ARG PROJECT_NAME
+#RUN composer create-project laravel/laravel -d ${PROJECT_NAME} --prefer-dist
+#RUN composer create-project laravel/laravel ${PROJECT_NAME} --prefer-dist
+
+#WORKDIR /var/www/html/${PROJECT_NAME}
+#VOLUME /var/www/html/${PROJECT_NAME}
+#RUN chmod 0777 /var/www/html/${PROJECT_NAME}
+
+#RUN composer install
+#RUN cd ${PROJECT_NAME} | composer install
+#RUN php artisan serve --host 0.0.0.0 --port 8000"
+
+#ENTRYPOINT ["php artisan serve --host 0.0.0.0 --port 8000"]
