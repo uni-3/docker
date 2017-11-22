@@ -8,12 +8,13 @@ services:
       args:
         PROJECT_NAME: $PROJECT_NAME
     volumes:
-      - ./$PROJECT_NAME:/var/www/html
+      - ./html:/var/www/html
     ports:
       - "4000:80"
       - "4001:8000"
     tty: true
-    #command: ["sh", "-c", "php artisan serve --host 0.0.0.0 --port 8000"]
+    working_dir: /var/www/html/${PROJECT_NAME}
+    command: ["sh", "-c", "php artisan serve --host 0.0.0.0 --port 8000"]
     env_file: .env
   db:
     image: mysql:5.7
