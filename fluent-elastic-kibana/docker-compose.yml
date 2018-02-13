@@ -5,13 +5,18 @@ services:
     build: ./fluentd
     env_file: ./.env
     volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+      #- ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+      #- ./fluentd/fluentd-cloudwatch-in.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluentd-elb-quick.conf:/fluentd/etc/fluent.conf
       - ./log:/fluentd/log
+      - ./tmp:/var/lib/fluent
     ports:
       - 24224:24224
+      - 24224:24224/udp
   # store log
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.1
+    image: elasticsearch:5.6.4
+    #image: elasticsearch:5.5.1
     #restart: always
     ports:
       - 9200:9200
@@ -25,16 +30,20 @@ services:
       # クロスドメインアクセスを許可することでWEBブラウザから直接クエリを実行できる
       - http.cors.enabled=true
       - http.cors.allow-origin=*
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m # usage cpu
+      - ES_JAVA_OPTS=-Xms1024m -Xmx1024m # usage cpu
       #- bootstrap.system_call_filter=false
       - bootstrap.memory_lock=false
+    volumes:
+      - ./es/data:/usr/share/elasticsearch/data
+
   # elastic search gui
-  elasticsearch-head:
-    image: mobz/elasticsearch-head:5
-    ports:
-      - 9100:9100
+  #elasticsearch_head:
+  #  image: mobz/elasticsearch-head:5
+  #  ports:
+  #    - 9100:9100
   # view log
   kibana:
-    image: kibana
+    image: kibana:5.6.4
+    #image: kibana:5.5.1
     ports:
       - "5601:5601"
