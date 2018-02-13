@@ -9,7 +9,7 @@ RUN pip install --upgrade setuptools pip
 RUN pip install flask-sqlalchemy==2.0 superset
 # 必要に応じて色々導入する
 RUN pip install mysqlclient psycopg2 #pyhive cx_Oracle sqlalchemy-redshift impylapy mssql
-RUN pip install PyMySQL
+RUN pip install PyMySQL sqlalchemy-bigquery
 
 RUN fabmanager create-admin --app superset --username admin --firstname admin --lastname admin --email test@example.com --password admin
 RUN superset db upgrade
