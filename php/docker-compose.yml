@@ -17,14 +17,31 @@ services:
     command: ["sh", "-c", "php artisan serve --host 0.0.0.0 --port 8000"]
     env_file: .env
   db:
+<<<<<<< Updated upstream
     image: mysql:5.7
+=======
+    #image: mysql:5.7
+    build:
+      context: .
+      dockerfile: Dockerfile-mysql
+>>>>>>> Stashed changes
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db:/var/lib/mysql:rw
       - ./mysql_conf:/etc/mysql/conf.d
+<<<<<<< Updated upstream
     env_file:
       .env_db
+=======
+      - ./db_local_stack:/stack/localdb:rw
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSORD: laravel
+      MYSQL_ROOT_PASSWORD: root
+>>>>>>> Stashed changes
     ports:
-      - 23306:3306
+      - "33306:3306"
+    command: "/stack/localdb/run.sh"
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:

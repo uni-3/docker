@@ -9,8 +9,6 @@ services:
      env_file:  .env
 
    superset:
-     depends_on:
-       - mysql
      build: ./
      ports:
        - "8088:80"
@@ -18,5 +16,7 @@ services:
      #restart: always
      environment:
        MYSQL_HOST: mysql:3306
+     depends_on:
+       - mysql
 volumes:
     db_data:

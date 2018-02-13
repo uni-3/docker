@@ -1,0 +1,6 @@
+FROM mysql:latest
+#COPY ./my.cnf /etc/mysql/conf.d/
+#RUN chown mysql:mysql /var/run/mysqld
+
+#RUN chown -R root:root /var/run/mysqld/
+#RUN chown -R uni:staff /var/run/mysqld/
