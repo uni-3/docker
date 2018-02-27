@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  cli:
+    image: drone/cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/tmp
+    working_dir: /tmp
