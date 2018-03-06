@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+     - ./notebooks:/home/jovyan
+    ports:
+      - "8888:8888"
+    #command: jupyter-lab --ip=0.0.0.0 --allow-root
