@@ -1,0 +1,666 @@
+{
+  "configurations" : [
+    {
+      "ams-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "ambari_metrics_user" : "ams",
+          "metrics_monitor_log_dir" : "/var/log/ambari-metrics-monitor",
+          "metrics_collector_heapsize" : "512",
+          "metrics_collector_pid_dir" : "/var/run/ambari-metrics-collector",
+          "metrics_collector_log_dir" : "/var/log/ambari-metrics-collector",
+          "metrics_monitor_pid_dir" : "/var/run/ambari-metrics-monitor",
+          "content" : "\n# Set environment variables here.\n\n# The java implementation to use. Java 1.6 required.\nexport JAVA_HOME={{java64_home}}\n\n# Collector Log directory for log4j\nexport AMS_COLLECTOR_LOG_DIR={{ams_collector_log_dir}}\n\n# Monitor Log directory for outfile\nexport AMS_MONITOR_LOG_DIR={{ams_monitor_log_dir}}\n\n# Collector pid directory\nexport AMS_COLLECTOR_PID_DIR={{ams_collector_pid_dir}}\n\n# Monitor pid directory\nexport AMS_MONITOR_PID_DIR={{ams_monitor_pid_dir}}\n\n# AMS HBase pid directory\nexport AMS_HBASE_PID_DIR={{hbase_pid_dir}}\n\n# AMS Collector heapsize\nexport AMS_COLLECTOR_HEAPSIZE={{metrics_collector_heapsize}}\n\n# HBase normalizer enabled\nexport AMS_HBASE_NORMALIZER_ENABLED={{ams_hbase_normalizer_enabled}}\n\n# HBase compaction policy enabled\nexport AMS_HBASE_FIFO_COMPACTION_ENABLED={{ams_hbase_fifo_compaction_enabled}}\n\n# HBase Tables Initialization check enabled\nexport AMS_HBASE_INIT_CHECK_ENABLED={{ams_hbase_init_check_enabled}}\n\n# AMS Collector options\nexport AMS_COLLECTOR_OPTS=\"-Djava.library.path=/usr/lib/ams-hbase/lib/hadoop-native\"\n{% if security_enabled %}\nexport AMS_COLLECTOR_OPTS=\"$AMS_COLLECTOR_OPTS -Djava.security.auth.login.config={{ams_collector_jaas_config_file}}\"\n{% endif %}\n\n# AMS Collector GC options\nexport AMS_COLLECTOR_GC_OPTS=\"-XX:+UseConcMarkSweepGC -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:{{ams_collector_log_dir}}/collector-gc.log-`date +'%Y%m%d%H%M'`\"\nexport AMS_COLLECTOR_OPTS=\"$AMS_COLLECTOR_OPTS $AMS_COLLECTOR_GC_OPTS\""
+        }
+      }
+    },
+    {
+      "ranger-kafka-audit" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "zoo.cfg" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "autopurge.purgeInterval" : "24",
+          "dataDir" : "/hadoop/zookeeper",
+          "autopurge.snapRetainCount" : "30",
+          "clientPort" : "2181",
+          "initLimit" : "10",
+          "tickTime" : "2000",
+          "syncLimit" : "5"
+        }
+      }
+    },
+    {
+      "ams-hbase-site" : {
+        "properties_attributes" : {
+          "final" : {
+            "hbase.zookeeper.quorum" : "true"
+          }
+        },
+        "properties" : {
+          "hfile.block.cache.size" : "0.3",
+          "phoenix.query.spoolThresholdBytes" : "20971520",
+          "hbase.zookeeper.property.dataDir" : "${hbase.tmp.dir}/zookeeper",
+          "hbase.regionserver.thread.compaction.large" : "2",
+          "hbase.master.port" : "61300",
+          "zookeeper.session.timeout.localHBaseCluster" : "120000",
+          "phoenix.query.keepAliveMs" : "300000",
+          "hbase.local.dir" : "${hbase.tmp.dir}/local",
+          "phoenix.query.timeoutMs" : "300000",
+          "hbase.regionserver.thread.compaction.small" : "3",
+          "hbase.zookeeper.quorum" : "{{zookeeper_quorum_hosts}}",
+          "hbase.client.scanner.timeout.period" : "300000",
+          "hbase.regionserver.info.port" : "61330",
+          "phoenix.query.rowKeyOrderSaltedTable" : "true",
+          "phoenix.mutate.batchSize" : "10000",
+          "zookeeper.znode.parent" : "/ams-hbase-unsecure",
+          "hbase.master.info.port" : "61310",
+          "hbase.rootdir" : "file:///var/lib/ambari-metrics-collector/hbase",
+          "hbase.cluster.distributed" : "false",
+          "hbase.hregion.majorcompaction" : "0",
+          "hbase.hstore.flusher.count" : "2",
+          "hbase.master.normalizer.class" : "org.apache.hadoop.hbase.master.normalizer.SimpleRegionNormalizer",
+          "hbase.snapshot.enabled" : "false",
+          "phoenix.spool.directory" : "${hbase.tmp.dir}/phoenix-spool",
+          "phoenix.coprocessor.maxMetaDataCacheSize" : "20480000",
+          "hbase.zookeeper.property.tickTime" : "6000",
+          "hbase.zookeeper.leaderport" : "61388",
+          "phoenix.sequence.saltBuckets" : "2",
+          "hbase.hstore.blockingStoreFiles" : "200",
+          "zookeeper.session.timeout" : "120000",
+          "phoenix.coprocessor.maxServerCacheTimeToLiveMs" : "60000",
+          "hbase.master.info.bindAddress" : "0.0.0.0",
+          "hbase.regionserver.global.memstore.lowerLimit" : "0.3",
+          "dfs.client.read.shortcircuit" : "true",
+          "phoenix.query.maxGlobalMemoryPercentage" : "15",
+          "hbase.hregion.memstore.flush.size" : "134217728",
+          "hbase.hregion.max.filesize" : "4294967296",
+          "phoenix.groupby.maxCacheSize" : "307200000",
+          "hbase.master.wait.on.regionservers.mintostart" : "1",
+          "hbase.regionserver.global.memstore.upperLimit" : "0.35",
+          "hbase.normalizer.period" : "600000",
+          "hbase.tmp.dir" : "/var/lib/ambari-metrics-collector/hbase-tmp",
+          "hbase.client.scanner.caching" : "10000",
+          "hbase.replication" : "false",
+          "hbase.rpc.timeout" : "300000",
+          "hbase.zookeeper.peerport" : "61288",
+          "hbase.regionserver.port" : "61320",
+          "hbase.zookeeper.property.clientPort" : "{{zookeeper_clientPort}}",
+          "hbase.hregion.memstore.block.multiplier" : "4",
+          "hbase.normalizer.enabled" : "false"
+        }
+      }
+    },
+    {
+      "zookeeper-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n#\n#\n# Licensed to the Apache Software Foundation (ASF) under one\n# or more contributor license agreements.  See the NOTICE file\n# distributed with this work for additional information\n# regarding copyright ownership.  The ASF licenses this file\n# to you under the Apache License, Version 2.0 (the\n# \"License\"); you may not use this file except in compliance\n# with the License.  You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing,\n# software distributed under the License is distributed on an\n# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n# KIND, either express or implied.  See the License for the\n# specific language governing permissions and limitations\n# under the License.\n#\n#\n#\n\n#\n# ZooKeeper Logging Configuration\n#\n\n# DEFAULT: console appender only\nlog4j.rootLogger=INFO, CONSOLE\n\n# Example with rolling log file\n#log4j.rootLogger=DEBUG, CONSOLE, ROLLINGFILE\n\n# Example with rolling log file and tracing\n#log4j.rootLogger=TRACE, CONSOLE, ROLLINGFILE, TRACEFILE\n\n#\n# Log INFO level and above messages to the console\n#\nlog4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender\nlog4j.appender.CONSOLE.Threshold=INFO\nlog4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout\nlog4j.appender.CONSOLE.layout.ConversionPattern=%d{ISO8601} - %-5p [%t:%C{1}@%L] - %m%n\n\n#\n# Add ROLLINGFILE to rootLogger to get log file output\n#    Log DEBUG level and above messages to a log file\nlog4j.appender.ROLLINGFILE=org.apache.log4j.RollingFileAppender\nlog4j.appender.ROLLINGFILE.Threshold=DEBUG\nlog4j.appender.ROLLINGFILE.File=zookeeper.log\n\n# Max log file size of 10MB\nlog4j.appender.ROLLINGFILE.MaxFileSize=10MB\n# uncomment the next line to limit number of backup files\n#log4j.appender.ROLLINGFILE.MaxBackupIndex=10\n\nlog4j.appender.ROLLINGFILE.layout=org.apache.log4j.PatternLayout\nlog4j.appender.ROLLINGFILE.layout.ConversionPattern=%d{ISO8601} - %-5p [%t:%C{1}@%L] - %m%n\n\n\n#\n# Add TRACEFILE to rootLogger to get log file output\n#    Log DEBUG level and above messages to a log file\nlog4j.appender.TRACEFILE=org.apache.log4j.FileAppender\nlog4j.appender.TRACEFILE.Threshold=TRACE\nlog4j.appender.TRACEFILE.File=zookeeper_trace.log\n\nlog4j.appender.TRACEFILE.layout=org.apache.log4j.PatternLayout\n### Notice we are including log4j's NDC here (%x)\nlog4j.appender.TRACEFILE.layout.ConversionPattern=%d{ISO8601} - %-5p [%t:%C{1}@%L][%x] - %m%n"
+        }
+      }
+    },
+    {
+      "storm-worker-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n<!--\n Licensed to the Apache Software Foundation (ASF) under one or more\n contributor license agreements.  See the NOTICE file distributed with\n this work for additional information regarding copyright ownership.\n The ASF licenses this file to You under the Apache License, Version 2.0\n (the \"License\"); you may not use this file except in compliance with\n the License.  You may obtain a copy of the License at\n\n     http://www.apache.org/licenses/LICENSE-2.0\n\n Unless required by applicable law or agreed to in writing, software\n distributed under the License is distributed on an \"AS IS\" BASIS,\n WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n See the License for the specific language governing permissions and\n limitations under the License.\n-->\n\n<configuration monitorInterval=\"60\">\n<properties>\n    <property name=\"pattern\">%d{yyyy-MM-dd HH:mm:ss.SSS} %c{1.} [%p] %msg%n</property>\n    <property name=\"patternNoTime\">%msg%n</property>\n    <property name=\"patternMetrics\">%d %-8r %m%n</property>\n</properties>\n<appenders>\n    <RollingFile name=\"A1\"\n\t\tfileName=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}\"\n\t\tfilePattern=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.%i.gz\">\n        <PatternLayout>\n            <pattern>${pattern}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"9\"/>\n    </RollingFile>\n    <RollingFile name=\"STDOUT\"\n\t\tfileName=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.out\"\n\t\tfilePattern=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.out.%i.gz\">\n        <PatternLayout>\n            <pattern>${patternNoTime}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"4\"/>\n    </RollingFile>\n    <RollingFile name=\"STDERR\"\n\t\tfileName=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.err\"\n\t\tfilePattern=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.err.%i.gz\">\n        <PatternLayout>\n            <pattern>${patternNoTime}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"4\"/>\n    </RollingFile>\n    <RollingFile name=\"METRICS\"\n\t\tfileName=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.metrics\"\n\t\tfilePattern=\"${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.metrics.%i.gz\">\n        <PatternLayout>\n            <pattern>${patternMetrics}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"2 MB\"/>\n        </Policies>\n        <DefaultRolloverStrategy max=\"9\"/>\n    </RollingFile>\n    <Syslog name=\"syslog\" format=\"RFC5424\" charset=\"UTF-8\" host=\"localhost\" port=\"514\"\n        protocol=\"UDP\" appName=\"[${sys:storm.id}:${sys:worker.port}]\" mdcId=\"mdc\" includeMDC=\"true\"\n        facility=\"LOCAL5\" enterpriseNumber=\"18060\" newLine=\"true\" exceptionPattern=\"%rEx{full}\"\n        messageId=\"[${sys:user.name}:${sys:logging.sensitivity}]\" id=\"storm\" immediateFail=\"true\" immediateFlush=\"true\"/>\n</appenders>\n<loggers>\n    <root level=\"info\"> <!-- We log everything -->\n        <appender-ref ref=\"A1\"/>\n        <appender-ref ref=\"syslog\"/>\n    </root>\n    <Logger name=\"org.apache.storm.metric.LoggingMetricsConsumer\" level=\"info\" additivity=\"false\">\n        <appender-ref ref=\"METRICS\"/>\n    </Logger>\n    <Logger name=\"STDERR\" level=\"INFO\">\n        <appender-ref ref=\"STDERR\"/>\n        <appender-ref ref=\"syslog\"/>\n    </Logger>\n    <Logger name=\"STDOUT\" level=\"INFO\">\n        <appender-ref ref=\"STDOUT\"/>\n        <appender-ref ref=\"syslog\"/>\n    </Logger>\n</loggers>\n</configuration>"
+        }
+      }
+    },
+    {
+      "ams-site" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "timeline.metrics.cluster.aggregator.hourly.interval" : "3600",
+          "timeline.metrics.cluster.aggregator.minute.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.cluster.aggregator.daily.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.host.aggregator.hourly.interval" : "3600",
+          "timeline.metrics.aggregators.skip.blockcache.enabled" : "false",
+          "timeline.metrics.service.rpc.address" : "0.0.0.0:60200",
+          "timeline.metrics.service.operation.mode" : "embedded",
+          "timeline.metrics.aggregator.checkpoint.dir" : "/var/lib/ambari-metrics-collector/checkpoint",
+          "timeline.metrics.cluster.aggregator.second.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.service.http.policy" : "HTTP_ONLY",
+          "timeline.metrics.host.aggregator.minute.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.service.watcher.timeout" : "30",
+          "timeline.metrics.service.checkpointDelay" : "60",
+          "timeline.metrics.cluster.aggregator.second.interval" : "120",
+          "timeline.metrics.service.webapp.address" : "%HOSTGROUP::host_group_1%:6188",
+          "timeline.metrics.host.aggregator.daily.ttl" : "31536000",
+          "timeline.metrics.service.watcher.delay" : "30",
+          "timeline.metrics.service.watcher.disabled" : "false",
+          "timeline.metrics.hbase.fifo.compaction.enabled" : "true",
+          "timeline.metrics.hbase.init.check.enabled" : "true",
+          "timeline.metrics.host.aggregator.hourly.disabled" : "false",
+          "timeline.metrics.service.cluster.aggregator.appIds" : "datanode,nodemanager,hbase",
+          "timeline.metrics.cluster.aggregator.hourly.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.host.aggregator.daily.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.service.resultset.fetchSize" : "2000",
+          "timeline.metrics.cluster.aggregator.hourly.ttl" : "31536000",
+          "timeline.metrics.host.aggregator.ttl" : "86400",
+          "phoenix.spool.directory" : "/tmp",
+          "timeline.metrics.host.aggregate.splitpoints" : "kafka.network.SocketServer.IdlePercent.networkProcessor.0.5MinuteRate",
+          "timeline.metrics.service.handler.thread.count" : "20",
+          "timeline.metrics.cache.size" : "150",
+          "timeline.metrics.cluster.aggregator.minute.interval" : "300",
+          "timeline.metrics.cluster.aggregator.minute.ttl" : "2592000",
+          "timeline.metrics.host.aggregator.minute.interval" : "300",
+          "timeline.metrics.cluster.aggregator.interpolation.enabled" : "true",
+          "timeline.metrics.cache.commit.interval" : "3",
+          "timeline.metrics.host.aggregator.minute.disabled" : "false",
+          "timeline.metrics.cache.enabled" : "true",
+          "timeline.metrics.cluster.aggregate.splitpoints" : "kafka.network.SocketServer.IdlePercent.networkProcessor.0.5MinuteRate",
+          "timeline.metrics.cluster.aggregator.minute.disabled" : "false",
+          "timeline.metrics.service.use.groupBy.aggregators" : "true",
+          "phoenix.query.maxGlobalMemoryPercentage" : "25",
+          "timeline.metrics.service.default.result.limit" : "15840",
+          "timeline.metrics.hbase.compression.scheme" : "SNAPPY",
+          "timeline.metrics.cluster.aggregator.daily.ttl" : "63072000",
+          "timeline.metrics.sink.report.interval" : "60",
+          "timeline.metrics.cluster.aggregator.second.timeslice.interval" : "30",
+          "timeline.metrics.host.aggregator.hourly.ttl" : "2592000",
+          "timeline.metrics.cluster.aggregator.daily.interval" : "86400",
+          "timeline.metrics.host.aggregator.daily.disabled" : "false",
+          "timeline.metrics.cluster.aggregator.daily.disabled" : "false",
+          "timeline.metrics.cluster.aggregator.hourly.disabled" : "false",
+          "timeline.metrics.service.watcher.initial.delay" : "600",
+          "timeline.metrics.host.aggregator.minute.ttl" : "604800",
+          "timeline.metrics.hbase.data.block.encoding" : "FAST_DIFF",
+          "timeline.metrics.cluster.aggregator.second.disabled" : "false",
+          "timeline.metrics.sink.collection.period" : "10",
+          "timeline.metrics.host.aggregator.hourly.checkpointCutOffMultiplier" : "2",
+          "timeline.metrics.daily.aggregator.minute.interval" : "86400",
+          "timeline.metrics.cluster.aggregator.second.ttl" : "259200"
+        }
+      }
+    },
+    {
+      "ranger-kafka-policymgr-ssl" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "ranger-storm-audit" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "storm-cluster-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n<!--\n Licensed to the Apache Software Foundation (ASF) under one or more\n contributor license agreements.  See the NOTICE file distributed with\n this work for additional information regarding copyright ownership.\n The ASF licenses this file to You under the Apache License, Version 2.0\n (the \"License\"); you may not use this file except in compliance with\n the License.  You may obtain a copy of the License at\n\n     http://www.apache.org/licenses/LICENSE-2.0\n\n Unless required by applicable law or agreed to in writing, software\n distributed under the License is distributed on an \"AS IS\" BASIS,\n WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n See the License for the specific language governing permissions and\n limitations under the License.\n-->\n<configuration monitorInterval=\"60\">\n<properties>\n    <property name=\"pattern\">%d{yyyy-MM-dd HH:mm:ss.SSS} %c{1.} [%p] %msg%n</property>\n</properties>\n<appenders>\n    <RollingFile name=\"A1\" immediateFlush=\"false\"\n                 fileName=\"${sys:storm.log.dir}/${sys:logfile.name}\"\n                 filePattern=\"${sys:storm.log.dir}/${sys:logfile.name}.%i.gz\">\n        <PatternLayout>\n            <pattern>${pattern}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"9\"/>\n    </RollingFile>\n    <RollingFile name=\"WEB-ACCESS\" immediateFlush=\"false\"\n                 fileName=\"${sys:storm.log.dir}/access-web-${sys:daemon.name}.log\"\n                 filePattern=\"${sys:storm.log.dir}/access-web-${sys:daemon.name}.log.%i.gz\">\n        <PatternLayout>\n            <pattern>${pattern}</pattern>\n        </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"9\"/>\n    </RollingFile>\n    <RollingFile name=\"THRIFT-ACCESS\" immediateFlush=\"false\"\n                 fileName=\"${sys:storm.log.dir}/access-${sys:logfile.name}\"\n                 filePattern=\"${sys:storm.log.dir}/access-${sys:logfile.name}.%i.gz\">\n    <PatternLayout>\n        <pattern>${pattern}</pattern>\n    </PatternLayout>\n        <Policies>\n            <SizeBasedTriggeringPolicy size=\"100 MB\"/> <!-- Or every 100 MB -->\n        </Policies>\n        <DefaultRolloverStrategy max=\"9\"/>\n    </RollingFile>\n    <Syslog name=\"syslog\" format=\"RFC5424\" charset=\"UTF-8\" host=\"localhost\" port=\"514\"\n            protocol=\"UDP\" appName=\"[${sys:daemon.name}]\" mdcId=\"mdc\" includeMDC=\"true\"\n            facility=\"LOCAL5\" enterpriseNumber=\"18060\" newLine=\"true\" exceptionPattern=\"%rEx{full}\"\n            messageId=\"[${sys:user.name}:S0]\" id=\"storm\" immediateFlush=\"true\" immediateFail=\"true\"/>\n</appenders>\n<loggers>\n\n    <Logger name=\"org.apache.storm.logging.filters.AccessLoggingFilter\" level=\"info\" additivity=\"false\">\n        <AppenderRef ref=\"WEB-ACCESS\"/>\n        <AppenderRef ref=\"syslog\"/>\n    </Logger>\n    <Logger name=\"org.apache.storm.logging.ThriftAccessLogger\" level=\"info\" additivity=\"false\">\n        <AppenderRef ref=\"THRIFT-ACCESS\"/>\n        <AppenderRef ref=\"syslog\"/>\n    </Logger>\n    <root level=\"info\"> <!-- We log everything -->\n        <appender-ref ref=\"A1\"/>\n        <appender-ref ref=\"syslog\"/>\n    </root>\n</loggers>\n</configuration>"
+        }
+      }
+    },
+    {
+      "ams-hbase-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "hbase_master_maxperm_size" : "128",
+          "max_open_files_limit" : "32768",
+          "regionserver_xmn_size" : "128",
+          "hbase_master_heapsize" : "640",
+          "hbase_regionserver_xmn_ratio" : "0.2",
+          "hbase_master_xmn_size" : "192",
+          "content" : "\n# Set environment variables here.\n\n# The java implementation to use. Java 1.6+ required.\nexport JAVA_HOME={{java64_home}}\n\n# HBase Configuration directory\nexport HBASE_CONF_DIR=${HBASE_CONF_DIR:-{{hbase_conf_dir}}}\n\n# Extra Java CLASSPATH elements. Optional.\nadditional_cp={{hbase_classpath_additional}}\nif [  -n \"$additional_cp\" ];\nthen\n  export HBASE_CLASSPATH=${HBASE_CLASSPATH}:$additional_cp\nelse\n  export HBASE_CLASSPATH=${HBASE_CLASSPATH}\nfi\n\n# The maximum amount of heap to use for hbase shell.\nexport HBASE_SHELL_OPTS=\"-Xmx256m\"\n\n# Extra Java runtime options.\n# Below are what we set by default. May only work with SUN JVM.\n# For more on why as well as other possible settings,\n# see http://wiki.apache.org/hadoop/PerformanceTuning\nexport HBASE_OPTS=\"-XX:+UseConcMarkSweepGC -XX:ErrorFile={{hbase_log_dir}}/hs_err_pid%p.log -Djava.io.tmpdir={{hbase_tmp_dir}}\"\nexport SERVER_GC_OPTS=\"-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:{{hbase_log_dir}}/gc.log-`date +'%Y%m%d%H%M'`\"\n# Uncomment below to enable java garbage collection logging.\n# export HBASE_OPTS=\"$HBASE_OPTS -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$HBASE_HOME/logs/gc-hbase.log\"\n\n# Uncomment and adjust to enable JMX exporting\n# See jmxremote.password and jmxremote.access in $JRE_HOME/lib/management to configure remote password access.\n# More details at: http://java.sun.com/javase/6/docs/technotes/guides/management/agent.html\n#\n# export HBASE_JMX_BASE=\"-Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false\"\n\n{% if java_version < 8 %}\nexport HBASE_MASTER_OPTS=\" -XX:PermSize=64m -XX:MaxPermSize={{hbase_master_maxperm_size}} -Xms{{hbase_heapsize}} -Xmx{{hbase_heapsize}} -Xmn{{hbase_master_xmn_size}} -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly\"\nexport HBASE_REGIONSERVER_OPTS=\"-XX:MaxPermSize=128m -Xmn{{regionserver_xmn_size}} -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}}\"\n{% else %}\nexport HBASE_MASTER_OPTS=\" -Xms{{hbase_heapsize}} -Xmx{{hbase_heapsize}} -Xmn{{hbase_master_xmn_size}} -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly\"\nexport HBASE_REGIONSERVER_OPTS=\" -Xmn{{regionserver_xmn_size}} -XX:CMSInitiatingOccupancyFraction=70 -XX:+UseCMSInitiatingOccupancyOnly -Xms{{regionserver_heapsize}} -Xmx{{regionserver_heapsize}}\"\n{% endif %}\n\n\n# export HBASE_THRIFT_OPTS=\"$HBASE_JMX_BASE -Dcom.sun.management.jmxremote.port=10103\"\n# export HBASE_ZOOKEEPER_OPTS=\"$HBASE_JMX_BASE -Dcom.sun.management.jmxremote.port=10104\"\n\n# File naming hosts on which HRegionServers will run. $HBASE_HOME/conf/regionservers by default.\nexport HBASE_REGIONSERVERS=${HBASE_CONF_DIR}/regionservers\n\n# Extra ssh options. Empty by default.\n# export HBASE_SSH_OPTS=\"-o ConnectTimeout=1 -o SendEnv=HBASE_CONF_DIR\"\n\n# Where log files are stored. $HBASE_HOME/logs by default.\nexport HBASE_LOG_DIR={{hbase_log_dir}}\n\n# A string representing this instance of hbase. $USER by default.\n# export HBASE_IDENT_STRING=$USER\n\n# The scheduling priority for daemon processes. See 'man nice'.\n# export HBASE_NICENESS=10\n\n# The directory where pid files are stored. /tmp by default.\nexport HBASE_PID_DIR={{hbase_pid_dir}}\n\n# Seconds to sleep between slave commands. Unset by default. This\n# can be useful in large clusters, where, e.g., slave rsyncs can\n# otherwise arrive faster than the master can service them.\n# export HBASE_SLAVE_SLEEP=0.1\n\n# Tell HBase whether it should manage it's own instance of Zookeeper or not.\nexport HBASE_MANAGES_ZK=false\n\n{% if security_enabled %}\nexport HBASE_OPTS=\"$HBASE_OPTS -Djava.security.auth.login.config={{client_jaas_config_file}}\"\nexport HBASE_MASTER_OPTS=\"$HBASE_MASTER_OPTS -Djava.security.auth.login.config={{master_jaas_config_file}}\"\nexport HBASE_REGIONSERVER_OPTS=\"$HBASE_REGIONSERVER_OPTS -Djava.security.auth.login.config={{regionserver_jaas_config_file}}\"\nexport HBASE_ZOOKEEPER_OPTS=\"$HBASE_ZOOKEEPER_OPTS -Djava.security.auth.login.config={{ams_zookeeper_jaas_config_file}}\"\n{% endif %}\n\n# use embedded native libs\n_HADOOP_NATIVE_LIB=\"/usr/lib/ams-hbase/lib/hadoop-native/\"\nexport HBASE_OPTS=\"$HBASE_OPTS -Djava.library.path=${_HADOOP_NATIVE_LIB}\"\n\n# Unset HADOOP_HOME to avoid importing HADOOP installed cluster related configs like: /usr/hdp/2.2.0.0-2041/hadoop/conf/\nexport HADOOP_HOME={{ams_hbase_home_dir}}\n\n# Explicitly Setting HBASE_HOME for AMS HBase so that there is no conflict\nexport HBASE_HOME={{ams_hbase_home_dir}}",
+          "hbase_pid_dir" : "/var/run/ambari-metrics-collector/",
+          "hbase_regionserver_shutdown_timeout" : "30",
+          "hbase_log_dir" : "/var/log/ambari-metrics-collector",
+          "hbase_regionserver_heapsize" : "768",
+          "hbase_classpath_additional" : ""
+        }
+      }
+    },
+    {
+      "ams-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n#\n# Licensed to the Apache Software Foundation (ASF) under one\n# or more contributor license agreements.  See the NOTICE file\n# distributed with this work for additional information\n# regarding copyright ownership.  The ASF licenses this file\n# to you under the Apache License, Version 2.0 (the\n# \"License\"); you may not use this file except in compliance\n# with the License.  You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n# Define some default values that can be overridden by system properties\nams.log.dir=.\nams.log.file=ambari-metrics-collector.log\n\n# Root logger option\nlog4j.rootLogger=INFO,file\n\n# Direct log messages to a log file\nlog4j.appender.file=org.apache.log4j.RollingFileAppender\nlog4j.appender.file.File=${ams.log.dir}/${ams.log.file}\nlog4j.appender.file.MaxFileSize=80MB\nlog4j.appender.file.MaxBackupIndex=60\nlog4j.appender.file.layout=org.apache.log4j.PatternLayout\nlog4j.appender.file.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n"
+        }
+      }
+    },
+    {
+      "ams-ssl-server" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "ssl.server.truststore.location" : "/etc/security/serverKeys/all.jks",
+          "ssl.server.truststore.reload.interval" : "10000",
+          "ssl.server.truststore.type" : "jks",
+          "ssl.server.keystore.location" : "/etc/security/serverKeys/keystore.jks",
+          "ssl.server.keystore.type" : "jks"
+        }
+      }
+    },
+    {
+      "kafka-broker" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "replica.high.watermark.checkpoint.interval.ms" : "5000",
+          "offsets.topic.num.partitions" : "50",
+          "auto.create.topics.enable" : "true",
+          "controller.socket.timeout.ms" : "30000",
+          "external.kafka.metrics.include.prefix" : "kafka.network.RequestMetrics.ResponseQueueTimeMs.request.OffsetCommit.98percentile,kafka.network.RequestMetrics.ResponseQueueTimeMs.request.Offsets.95percentile,kafka.network.RequestMetrics.ResponseSendTimeMs.request.Fetch.95percentile,kafka.network.RequestMetrics.RequestsPerSec.request",
+          "replica.socket.receive.buffer.bytes" : "65536",
+          "min.insync.replicas" : "1",
+          "kafka.timeline.metrics.maxRowCacheSize" : "10000",
+          "zookeeper.connection.timeout.ms" : "25000",
+          "controlled.shutdown.retry.backoff.ms" : "5000",
+          "replica.fetch.wait.max.ms" : "500",
+          "num.recovery.threads.per.data.dir" : "1",
+          "kafka.timeline.metrics.reporter.sendInterval" : "5900",
+          "log.roll.hours" : "168",
+          "default.replication.factor" : "1",
+          "kafka.timeline.metrics.port" : "{{metric_collector_port}}",
+          "offsets.topic.segment.bytes" : "104857600",
+          "fetch.purgatory.purge.interval.requests" : "10000",
+          "replica.socket.timeout.ms" : "30000",
+          "message.max.bytes" : "1000000",
+          "replica.lag.max.messages" : "4000",
+          "kafka.ganglia.metrics.port" : "8671",
+          "num.io.threads" : "8",
+          "offsets.commit.required.acks" : "-1",
+          "delete.topic.enable" : "false",
+          "log.index.interval.bytes" : "4096",
+          "offsets.commit.timeout.ms" : "5000",
+          "log.segment.bytes" : "1073741824",
+          "offset.metadata.max.bytes" : "4096",
+          "zookeeper.connect" : "%HOSTGROUP::host_group_1%:2181",
+          "port" : "6667",
+          "zookeeper.sync.time.ms" : "2000",
+          "num.replica.fetchers" : "1",
+          "log.dirs" : "/kafka-logs",
+          "controlled.shutdown.enable" : "true",
+          "kafka.timeline.metrics.host" : "{{metric_collector_host}}",
+          "compression.type" : "producer",
+          "offsets.load.buffer.size" : "5242880",
+          "controlled.shutdown.max.retries" : "3",
+          "offsets.topic.replication.factor" : "3",
+          "queued.max.requests" : "500",
+          "auto.leader.rebalance.enable" : "true",
+          "leader.imbalance.check.interval.seconds" : "300",
+          "replica.lag.time.max.ms" : "10000",
+          "socket.request.max.bytes" : "104857600",
+          "zookeeper.session.timeout.ms" : "30000",
+          "kafka.timeline.metrics.truststore.path" : "{{metric_truststore_path}}",
+          "log.retention.bytes" : "-1",
+          "num.network.threads" : "3",
+          "kafka.timeline.metrics.protocol" : "{{metric_collector_protocol}}",
+          "offsets.retention.minutes" : "86400000",
+          "kafka.metrics.reporters" : "org.apache.hadoop.metrics2.sink.kafka.KafkaTimelineMetricsReporter",
+          "log.cleanup.interval.mins" : "10",
+          "socket.send.buffer.bytes" : "102400",
+          "log.retention.hours" : "168",
+          "kafka.timeline.metrics.reporter.enabled" : "true",
+          "num.partitions" : "1",
+          "listeners" : "PLAINTEXT://localhost:6667",
+          "socket.receive.buffer.bytes" : "102400",
+          "replica.fetch.min.bytes" : "1",
+          "external.kafka.metrics.exclude.prefix" : "kafka.network.RequestMetrics,kafka.server.DelayedOperationPurgatory,kafka.server.BrokerTopicMetrics.BytesRejectedPerSec",
+          "controller.message.queue.size" : "10",
+          "kafka.ganglia.metrics.reporter.enabled" : "true",
+          "log.index.size.max.bytes" : "10485760",
+          "offsets.retention.check.interval.ms" : "600000",
+          "producer.purgatory.purge.interval.requests" : "10000",
+          "kafka.ganglia.metrics.group" : "kafka",
+          "offsets.topic.compression.codec" : "0",
+          "replica.fetch.max.bytes" : "1048576",
+          "leader.imbalance.per.broker.percentage" : "10",
+          "kafka.timeline.metrics.truststore.type" : "{{metric_truststore_type}}"
+        }
+      }
+    },
+    {
+      "ams-hbase-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n# Licensed to the Apache Software Foundation (ASF) under one\n# or more contributor license agreements.  See the NOTICE file\n# distributed with this work for additional information\n# regarding copyright ownership.  The ASF licenses this file\n# to you under the Apache License, Version 2.0 (the\n# \"License\"); you may not use this file except in compliance\n# with the License.  You may obtain a copy of the License at\n#\n#     http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n\n\n# Define some default values that can be overridden by system properties\nhbase.root.logger=INFO,console\nhbase.security.logger=INFO,console\nhbase.log.dir=.\nhbase.log.file=hbase.log\n\n# Define the root logger to the system property \"hbase.root.logger\".\nlog4j.rootLogger=${hbase.root.logger}\n\n# Logging Threshold\nlog4j.threshold=ALL\n\n#\n# Daily Rolling File Appender\n#\nlog4j.appender.DRFA=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.DRFA.File=${hbase.log.dir}/${hbase.log.file}\n\n# Rollver at midnight\nlog4j.appender.DRFA.DatePattern=.yyyy-MM-dd\n\n# 30-day backup\n#log4j.appender.DRFA.MaxBackupIndex=30\nlog4j.appender.DRFA.layout=org.apache.log4j.PatternLayout\n\n# Pattern format: Date LogLevel LoggerName LogMessage\nlog4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %-5p [%t] %c{2}: %m%n\n\n# Rolling File Appender properties\nhbase.log.maxfilesize=256MB\nhbase.log.maxbackupindex=20\n\n# Rolling File Appender\nlog4j.appender.RFA=org.apache.log4j.RollingFileAppender\nlog4j.appender.RFA.File=${hbase.log.dir}/${hbase.log.file}\n\nlog4j.appender.RFA.MaxFileSize=${hbase.log.maxfilesize}\nlog4j.appender.RFA.MaxBackupIndex=${hbase.log.maxbackupindex}\n\nlog4j.appender.RFA.layout=org.apache.log4j.PatternLayout\nlog4j.appender.RFA.layout.ConversionPattern=%d{ISO8601} %-5p [%t] %c{2}: %m%n\n\n#\n# Security audit appender\n#\nhbase.security.log.file=SecurityAuth.audit\nhbase.security.log.maxfilesize=256MB\nhbase.security.log.maxbackupindex=20\nlog4j.appender.RFAS=org.apache.log4j.RollingFileAppender\nlog4j.appender.RFAS.File=${hbase.log.dir}/${hbase.security.log.file}\nlog4j.appender.RFAS.MaxFileSize=${hbase.security.log.maxfilesize}\nlog4j.appender.RFAS.MaxBackupIndex=${hbase.security.log.maxbackupindex}\nlog4j.appender.RFAS.layout=org.apache.log4j.PatternLayout\nlog4j.appender.RFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n\nlog4j.category.SecurityLogger=${hbase.security.logger}\nlog4j.additivity.SecurityLogger=false\n#log4j.logger.SecurityLogger.org.apache.hadoop.hbase.security.access.AccessController=TRACE\n\n#\n# Null Appender\n#\nlog4j.appender.NullAppender=org.apache.log4j.varia.NullAppender\n\n#\n# console\n# Add \"console\" to rootlogger above if you want to use this\n#\nlog4j.appender.console=org.apache.log4j.ConsoleAppender\nlog4j.appender.console.target=System.err\nlog4j.appender.console.layout=org.apache.log4j.PatternLayout\nlog4j.appender.console.layout.ConversionPattern=%d{ISO8601} %-5p [%t] %c{2}: %m%n\n\n# Custom Logging levels\n\nlog4j.logger.org.apache.zookeeper=INFO\n#log4j.logger.org.apache.hadoop.fs.FSNamesystem=DEBUG\nlog4j.logger.org.apache.hadoop.hbase=INFO\n# Make these two classes INFO-level. Make them DEBUG to see more zk debug.\nlog4j.logger.org.apache.hadoop.hbase.zookeeper.ZKUtil=INFO\nlog4j.logger.org.apache.hadoop.hbase.zookeeper.ZooKeeperWatcher=INFO\n#log4j.logger.org.apache.hadoop.dfs=DEBUG\n# Set this class to log INFO only otherwise its OTT\n# Enable this to get detailed connection error/retry logging.\n# log4j.logger.org.apache.hadoop.hbase.client.HConnectionManager$HConnectionImplementation=TRACE\n\n\n# Uncomment this line to enable tracing on _every_ RPC call (this can be a lot of output)\n#log4j.logger.org.apache.hadoop.ipc.HBaseServer.trace=DEBUG\n\n# Uncomment the below if you want to remove logging of client region caching'\n# and scan of .META. messages\n# log4j.logger.org.apache.hadoop.hbase.client.HConnectionManager$HConnectionImplementation=INFO\n# log4j.logger.org.apache.hadoop.hbase.client.MetaScanner=INFO"
+        }
+      }
+    },
+    {
+      "ams-ssl-client" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "ssl.client.truststore.type" : "jks",
+          "ssl.client.truststore.location" : "/etc/security/clientKeys/all.jks"
+        }
+      }
+    },
+    {
+      "kafka-log4j" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "content" : "\n#\n#\n# Licensed to the Apache Software Foundation (ASF) under one\n# or more contributor license agreements.  See the NOTICE file\n# distributed with this work for additional information\n# regarding copyright ownership.  The ASF licenses this file\n# to you under the Apache License, Version 2.0 (the\n# \"License\"); you may not use this file except in compliance\n# with the License.  You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing,\n# software distributed under the License is distributed on an\n# \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n# KIND, either express or implied.  See the License for the\n# specific language governing permissions and limitations\n# under the License.\n#\n#\n#\nkafka.logs.dir=logs\n\nlog4j.rootLogger=INFO, stdout\n\nlog4j.appender.stdout=org.apache.log4j.ConsoleAppender\nlog4j.appender.stdout.layout=org.apache.log4j.PatternLayout\nlog4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n\n\nlog4j.appender.kafkaAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.kafkaAppender.DatePattern='.'yyyy-MM-dd-HH\nlog4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log\nlog4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n\n\nlog4j.appender.stateChangeAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.stateChangeAppender.DatePattern='.'yyyy-MM-dd-HH\nlog4j.appender.stateChangeAppender.File=${kafka.logs.dir}/state-change.log\nlog4j.appender.stateChangeAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.stateChangeAppender.layout.ConversionPattern=[%d] %p %m (%c)%n\n\nlog4j.appender.requestAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.requestAppender.DatePattern='.'yyyy-MM-dd-HH\nlog4j.appender.requestAppender.File=${kafka.logs.dir}/kafka-request.log\nlog4j.appender.requestAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.requestAppender.layout.ConversionPattern=[%d] %p %m (%c)%n\n\nlog4j.appender.cleanerAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.cleanerAppender.DatePattern='.'yyyy-MM-dd-HH\nlog4j.appender.cleanerAppender.File=${kafka.logs.dir}/log-cleaner.log\nlog4j.appender.cleanerAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.cleanerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n\n\nlog4j.appender.controllerAppender=org.apache.log4j.DailyRollingFileAppender\nlog4j.appender.controllerAppender.DatePattern='.'yyyy-MM-dd-HH\nlog4j.appender.controllerAppender.File=${kafka.logs.dir}/controller.log\nlog4j.appender.controllerAppender.layout=org.apache.log4j.PatternLayout\nlog4j.appender.controllerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n\n\n# Turn on all our debugging info\n#log4j.logger.kafka.producer.async.DefaultEventHandler=DEBUG, kafkaAppender\n#log4j.logger.kafka.client.ClientUtils=DEBUG, kafkaAppender\n#log4j.logger.kafka.perf=DEBUG, kafkaAppender\n#log4j.logger.kafka.perf.ProducerPerformance$ProducerThread=DEBUG, kafkaAppender\n#log4j.logger.org.I0Itec.zkclient.ZkClient=DEBUG\nlog4j.logger.kafka=INFO, kafkaAppender\nlog4j.logger.kafka.network.RequestChannel$=WARN, requestAppender\nlog4j.additivity.kafka.network.RequestChannel$=false\n\n#log4j.logger.kafka.network.Processor=TRACE, requestAppender\n#log4j.logger.kafka.server.KafkaApis=TRACE, requestAppender\n#log4j.additivity.kafka.server.KafkaApis=false\nlog4j.logger.kafka.request.logger=WARN, requestAppender\nlog4j.additivity.kafka.request.logger=false\n\nlog4j.logger.kafka.controller=TRACE, controllerAppender\nlog4j.additivity.kafka.controller=false\n\nlog4j.logger.kafka.log.LogCleaner=INFO, cleanerAppender\nlog4j.additivity.kafka.log.LogCleaner=false\n\nlog4j.logger.state.change.logger=TRACE, stateChangeAppender\nlog4j.additivity.state.change.logger=false"
+        }
+      }
+    },
+    {
+      "ranger-kafka-plugin-properties" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "ams-hbase-policy" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "security.masterregion.protocol.acl" : "*",
+          "security.admin.protocol.acl" : "*",
+          "security.client.protocol.acl" : "*"
+        }
+      }
+    },
+    {
+      "kafka-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "kafka_pid_dir" : "/var/run/kafka",
+          "kafka_user_nofile_limit" : "128000",
+          "kafka_log_dir" : "/var/log/kafka",
+          "kafka_user_nproc_limit" : "65536",
+          "content" : "\n#!/bin/bash\n\n# Set KAFKA specific environment variables here.\n\n# The java implementation to use.\nexport JAVA_HOME={{java64_home}}\nexport PATH=$PATH:$JAVA_HOME/bin\nexport PID_DIR={{kafka_pid_dir}}\nexport LOG_DIR={{kafka_log_dir}}\nexport KAFKA_KERBEROS_PARAMS={{kafka_kerberos_params}}\n# Add kafka sink to classpath and related depenencies\nif [ -e \"/usr/lib/ambari-metrics-kafka-sink/ambari-metrics-kafka-sink.jar\" ]; then\n  export CLASSPATH=$CLASSPATH:/usr/lib/ambari-metrics-kafka-sink/ambari-metrics-kafka-sink.jar\n  export CLASSPATH=$CLASSPATH:/usr/lib/ambari-metrics-kafka-sink/lib/*\nfi\nif [ -f /etc/kafka/conf/kafka-ranger-env.sh ]; then\n. /etc/kafka/conf/kafka-ranger-env.sh\nfi",
+          "is_supported_kafka_ranger" : "true",
+          "kafka_user" : "kafka"
+        }
+      }
+    },
+    {
+      "ams-grafana-ini" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "protocol" : "http",
+          "cert_key" : "/etc/ambari-metrics-grafana/conf/ams-grafana.key",
+          "port" : "3000",
+          "content" : "\n##################### Grafana Configuration Example #####################\n#\n# Everything has defaults so you only need to uncomment things you want to\n# change\n\n# possible values : production, development\n; app_mode = production\n\n#################################### Paths ####################################\n[paths]\n# Path to where grafana can store temp files, sessions, and the sqlite3 db (if that is used)\n#\n;data = /var/lib/grafana\ndata = {{ams_grafana_data_dir}}\n#\n# Directory where grafana can store logs\n#\n;logs = /var/log/grafana\nlogs = {{ams_grafana_log_dir}}\n\n\n#################################### Server ####################################\n[server]\n# Protocol (http or https)\n;protocol = http\nprotocol = {{ams_grafana_protocol}}\n# The ip address to bind to, empty will bind to all interfaces\n;http_addr =\n\n# The http port  to use\n;http_port = 3000\nhttp_port = {{ams_grafana_port}}\n\n# The public facing domain name used to access grafana from a browser\n;domain = localhost\n\n# Redirect to correct domain if host header does not match domain\n# Prevents DNS rebinding attacks\n;enforce_domain = false\n\n# The full public facing url\n;root_url = %(protocol)s://%(domain)s:%(http_port)s/\n\n# Log web requests\n;router_logging = false\n\n# the path relative working path\n;static_root_path = public\nstatic_root_path = /usr/lib/ambari-metrics-grafana/public\n\n# enable gzip\n;enable_gzip = false\n\n# https certs & key file\n;cert_file =\n;cert_key =\ncert_file = {{ams_grafana_cert_file}}\ncert_key = {{ams_grafana_cert_key}}\n\n#################################### Database ####################################\n[database]\n# Either \"mysql\", \"postgres\" or \"sqlite3\", it's your choice\n;type = sqlite3\n;host = 127.0.0.1:3306\n;name = grafana\n;user = root\n;password =\n\n# For \"postgres\" only, either \"disable\", \"require\" or \"verify-full\"\n;ssl_mode = disable\n\n# For \"sqlite3\" only, path relative to data_path setting\n;path = grafana.db\n\n#################################### Session ####################################\n[session]\n# Either \"memory\", \"file\", \"redis\", \"mysql\", \"postgres\", default is \"file\"\n;provider = file\n\n# Provider config options\n# memory: not have any config yet\n# file: session dir path, is relative to grafana data_path\n# redis: config like redis server e.g. `addr=127.0.0.1:6379,pool_size=100,db=grafana`\n# mysql: go-sql-driver/mysql dsn config string, e.g. `user:password@tcp(127.0.0.1:3306)/database_name`\n# postgres: user=a password=b host=localhost port=5432 dbname=c sslmode=disable\n;provider_config = sessions\n\n# Session cookie name\n;cookie_name = grafana_sess\n\n# If you use session in https only, default is false\n;cookie_secure = false\n\n# Session life time, default is 86400\n;session_life_time = 86400\n\n#################################### Analytics ####################################\n[analytics]\n# Server reporting, sends usage counters to stats.grafana.org every 24 hours.\n# No ip addresses are being tracked, only simple counters to track\n# running instances, dashboard and error counts. It is very helpful to us.\n# Change this option to false to disable reporting.\n;reporting_enabled = true\n\n# Google Analytics universal tracking code, only enabled if you specify an id here\n;google_analytics_ua_id =\n\n#################################### Security ####################################\n[security]\n# default admin user, created on startup\nadmin_user = {{ams_grafana_admin_user}}\n\n# default admin password, can be changed before first start of grafana,  or in profile settings\nadmin_password = {{ams_grafana_admin_pwd}}\n\n# used for signing\n;secret_key = SW2YcwTIb9zpOOhoPsMm\n\n# Auto-login remember days\n;login_remember_days = 7\n;cookie_username = grafana_user\n;cookie_remember_name = grafana_remember\n\n# disable gravatar profile images\n;disable_gravatar = false\n\n# data source proxy whitelist (ip_or_domain:port seperated by spaces)\n;data_source_proxy_whitelist =\n\n#################################### Users ####################################\n[users]\n# disable user signup / registration\n;allow_sign_up = true\n\n# Allow non admin users to create organizations\n;allow_org_create = true\n\n# Set to true to automatically assign new users to the default organization (id 1)\n;auto_assign_org = true\n\n# Default role new users will be automatically assigned (if disabled above is set to true)\n;auto_assign_org_role = Viewer\n\n# Background text for the user field on the login page\n;login_hint = email or username\n\n#################################### Anonymous Auth ##########################\n[auth.anonymous]\n# enable anonymous access\nenabled = true\n\n# specify organization name that should be used for unauthenticated users\norg_name = Main Org.\n\n# specify role for unauthenticated users\n;org_role = Admin\n\n#################################### Github Auth ##########################\n[auth.github]\n;enabled = false\n;allow_sign_up = false\n;client_id = some_id\n;client_secret = some_secret\n;scopes = user:email,read:org\n;auth_url = https://github.com/login/oauth/authorize\n;token_url = https://github.com/login/oauth/access_token\n;api_url = https://api.github.com/user\n;team_ids =\n;allowed_organizations =\n\n#################################### Google Auth ##########################\n[auth.google]\n;enabled = false\n;allow_sign_up = false\n;client_id = some_client_id\n;client_secret = some_client_secret\n;scopes = https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email\n;auth_url = https://accounts.google.com/o/oauth2/auth\n;token_url = https://accounts.google.com/o/oauth2/token\n;api_url = https://www.googleapis.com/oauth2/v1/userinfo\n;allowed_domains =\n\n#################################### Auth Proxy ##########################\n[auth.proxy]\n;enabled = false\n;header_name = X-WEBAUTH-USER\n;header_property = username\n;auto_sign_up = true\n\n#################################### Basic Auth ##########################\n[auth.basic]\n;enabled = true\n\n#################################### Auth LDAP ##########################\n[auth.ldap]\n;enabled = false\n;config_file = /etc/grafana/ldap.toml\n\n#################################### SMTP / Emailing ##########################\n[smtp]\n;enabled = false\n;host = localhost:25\n;user =\n;password =\n;cert_file =\n;key_file =\n;skip_verify = false\n;from_address = admin@grafana.localhost\n\n[emails]\n;welcome_email_on_sign_up = false\n\n#################################### Logging ##########################\n[log]\n# Either \"console\", \"file\", default is \"console\"\n# Use comma to separate multiple modes, e.g. \"console, file\"\n;mode = console, file\n\n# Buffer length of channel, keep it as it is if you don't know what it is.\n;buffer_len = 10000\n\n# Either \"Trace\", \"Debug\", \"Info\", \"Warn\", \"Error\", \"Critical\", default is \"Trace\"\n;level = Info\n\n# For \"console\" mode only\n[log.console]\n;level =\n\n# For \"file\" mode only\n[log.file]\n;level =\n# This enables automated log rotate(switch of following options), default is true\n;log_rotate = true\n\n# Max line number of single file, default is 1000000\n;max_lines = 1000000\n\n# Max size shift of single file, default is 28 means 1 << 28, 256MB\n;max_lines_shift = 28\n\n# Segment log daily, default is true\n;daily_rotate = true\n\n# Expired days of log file(delete after max days), default is 7\n;max_days = 7\n\n#################################### AMPQ Event Publisher ##########################\n[event_publisher]\n;enabled = false\n;rabbitmq_url = amqp://localhost/\n;exchange = grafana_events\n\n;#################################### Dashboard JSON files ##########################\n[dashboards.json]\n;enabled = false\n;path = /var/lib/grafana/dashboards\npath = /usr/lib/ambari-metrics-grafana/public/dashboards",
+          "cert_file" : "/etc/ambari-metrics-grafana/conf/ams-grafana.crt"
+        }
+      }
+    },
+    {
+      "ams-hbase-security-site" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "hbase.coprocessor.master.classes" : "",
+          "hbase.myclient.keytab" : "",
+          "hadoop.security.authentication" : "",
+          "hbase.myclient.principal" : "",
+          "ams.zookeeper.keytab" : "",
+          "hbase.zookeeper.property.jaasLoginRenew" : "",
+          "hbase.regionserver.keytab.file" : "",
+          "hbase.zookeeper.property.authProvider.1" : "",
+          "hbase.regionserver.kerberos.principal" : "",
+          "hbase.zookeeper.property.kerberos.removeHostFromPrincipal" : "",
+          "hbase.coprocessor.region.classes" : "",
+          "hbase.security.authentication" : "",
+          "hbase.master.keytab.file" : "",
+          "hbase.security.authorization" : "",
+          "hbase.zookeeper.property.kerberos.removeRealmFromPrincipal" : "",
+          "hbase.master.kerberos.principal" : "",
+          "ams.zookeeper.principal" : ""
+        }
+      }
+    },
+    {
+      "storm-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "storm_user_nofile_limit" : "128000",
+          "jmxremote_port" : "56431",
+          "storm_log_dir" : "/var/log/storm",
+          "storm_pid_dir" : "/var/run/storm",
+          "nimbus_seeds_supported" : "true",
+          "storm_logs_supported" : "true",
+          "storm_user" : "storm",
+          "storm_user_nproc_limit" : "65536",
+          "content" : "\n      #!/bin/bash\n\n      # Set Storm specific environment variables here.\n\n      # The java implementation to use.\n      export JAVA_HOME={{java64_home}}\n\n      export STORM_CONF_DIR={{conf_dir}}\n      export STORM_HOME={{storm_component_home_dir}}\n\n      export STORM_JAR_JVM_OPTS={{jar_jvm_opts}}"
+        }
+      }
+    },
+    {
+      "storm-site" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "storm.messaging.netty.min_wait_ms" : "100",
+          "topology.enable.message.timeouts" : "true",
+          "storm.messaging.netty.buffer_size" : "5242880",
+          "client.jartransformer.class" : "org.apache.storm.hack.StormShadeTransformer",
+          "ui.filter" : "null",
+          "storm.messaging.netty.client_worker_threads" : "1",
+          "transactional.zookeeper.root" : "/transactional",
+          "topology.metrics.aggregate.metric.evict.secs" : "5",
+          "topology.tuple.serializer" : "org.apache.storm.serialization.types.ListDelegateSerializer",
+          "topology.spout.wait.strategy" : "org.apache.storm.spout.SleepSpoutWaitStrategy",
+          "drpc.port" : "3772",
+          "topology.max.spout.pending" : "1000",
+          "topology.transfer.buffer.size" : "1024",
+          "supervisor.worker.timeout.secs" : "30",
+          "logviewer.port" : "8000",
+          "metrics.reporter.register" : "org.apache.hadoop.metrics2.sink.storm.StormTimelineMetricsReporter",
+          "nimbus.file.copy.expiration.secs" : "600",
+          "drpc.childopts" : "-Xmx768m _JAAS_PLACEHOLDER",
+          "logviewer.childopts" : "-Xmx128m _JAAS_PLACEHOLDER",
+          "nimbus.task.launch.secs" : "120",
+          "storm.zookeeper.servers" : "['%HOSTGROUP::host_group_1%']",
+          "storm.messaging.transport" : "org.apache.storm.messaging.netty.Context",
+          "topology.workers" : "1",
+          "drpc.invocations.port" : "3773",
+          "topology.kryo.factory" : "org.apache.storm.serialization.DefaultKryoFactory",
+          "nimbus.cleanup.inbox.freq.secs" : "600",
+          "_storm.thrift.secure.transport" : "org.apache.storm.security.auth.kerberos.KerberosSaslTransportPlugin",
+          "topology.fall.back.on.java.serialization" : "true",
+          "logviewer.appender.name" : "A1",
+          "storm.messaging.netty.server_worker_threads" : "1",
+          "supervisor.slots.ports" : "[6700, 6701]",
+          "storm.zookeeper.connection.timeout" : "15000",
+          "topology.tick.tuple.freq.secs" : "null",
+          "storm.cluster.metrics.consumer.register" : "[{\"class\": \"org.apache.hadoop.metrics2.sink.storm.StormTimelineMetricsReporter\"}]",
+          "topology.stats.sample.rate" : "0.05",
+          "storm.local.dir" : "/hadoop/storm",
+          "nimbus.inbox.jar.expiration.secs" : "3600",
+          "topology.max.replication.wait.time.sec.default" : "60",
+          "storm.messaging.netty.max_retries" : "30",
+          "topology.debug" : "false",
+          "storm.zookeeper.retry.interval" : "1000",
+          "topology.receiver.buffer.size" : "8",
+          "storm.zookeeper.retry.times" : "5",
+          "java.library.path" : "/usr/local/lib:/opt/local/lib:/usr/lib:/usr/hdp/current/storm-client/lib",
+          "zmq.linger.millis" : "5000",
+          "drpc.request.timeout.secs" : "600",
+          "zmq.threads" : "1",
+          "topology.state.synchronization.timeout.secs" : "60",
+          "topology.worker.shared.thread.pool.size" : "4",
+          "topology.executor.receive.buffer.size" : "1024",
+          "supervisor.monitor.frequency.secs" : "3",
+          "topology.optimize" : "true",
+          "transactional.zookeeper.port" : "null",
+          "storm.zookeeper.port" : "2181",
+          "storm.zookeeper.retry.intervalceiling.millis" : "30000",
+          "nimbus.thrift.port" : "6627",
+          "nimbus.thrift.threads" : "196",
+          "_storm.thrift.nonsecure.transport" : "org.apache.storm.security.auth.SimpleTransportPlugin",
+          "nimbus.seeds" : "['%HOSTGROUP::host_group_1%']",
+          "topology.min.replication.count" : "{{actual_topology_min_replication_count}}",
+          "topology.worker.childopts" : "null",
+          "topology.max.replication.wait.time.sec" : "{{actual_topology_max_replication_wait_time_sec}}",
+          "topology.min.replication.count.default" : "1",
+          "topology.max.task.parallelism" : "null",
+          "topology.acker.executors" : "null",
+          "supervisor.worker.start.timeout.secs" : "120",
+          "_storm.min.ruid" : "null",
+          "nimbus.reassign" : "true",
+          "supervisor.heartbeat.frequency.secs" : "5",
+          "topology.metrics.aggregate.per.worker" : "true",
+          "topology.trident.batch.emit.interval.millis" : "500",
+          "task.heartbeat.frequency.secs" : "3",
+          "storm.thrift.transport" : "{{storm_thrift_transport}}",
+          "drpc.worker.threads" : "64",
+          "ui.port" : "8744",
+          "drpc.queue.size" : "128",
+          "topology.message.timeout.secs" : "30",
+          "topology.error.throttle.interval.secs" : "10",
+          "storm.log.dir" : "{{log_dir}}",
+          "topology.builtin.metrics.bucket.size.secs" : "60",
+          "nimbus.monitor.freq.secs" : "10",
+          "topology.executor.send.buffer.size" : "1024",
+          "storm.local.mode.zmq" : "false",
+          "transactional.zookeeper.servers" : "null",
+          "nimbus.task.timeout.secs" : "30",
+          "topology.metrics.consumer.register" : "[{\"class\": \"org.apache.hadoop.metrics2.sink.storm.StormTimelineMetricsSink\", \"parallelism.hint\": 1, \"whitelist\": [\"kafkaOffset\\\\..+/\", \"__complete-latency\", \"__process-latency\", \"__receive\\\\.population$\", \"__sendqueue\\\\.population$\", \"__execute-count\", \"__emit-count\", \"__ack-count\", \"__fail-count\", \"memory/heap\\\\.usedBytes$\", \"memory/nonHeap\\\\.usedBytes$\", \"GC/.+\\\\.count$\", \"GC/.+\\\\.timeMs$\"]}]",
+          "dev.zookeeper.path" : "/tmp/dev-storm-zookeeper",
+          "topology.metrics.expand.map.type" : "true",
+          "nimbus.supervisor.timeout.secs" : "60",
+          "topology.skip.missing.kryo.registrations" : "false",
+          "storm.zookeeper.root" : "/storm",
+          "storm.zookeeper.session.timeout" : "30000",
+          "topology.disruptor.wait.strategy" : "com.lmax.disruptor.BlockingWaitStrategy",
+          "zmq.hwm" : "0",
+          "topology.sleep.spout.wait.strategy.time.ms" : "1",
+          "nimbus.topology.validator" : "org.apache.storm.nimbus.DefaultTopologyValidator",
+          "storm.cluster.mode" : "distributed",
+          "task.refresh.poll.secs" : "10",
+          "ui.childopts" : "-Xmx768m _JAAS_PLACEHOLDER",
+          "storm.messaging.netty.max_wait_ms" : "1000",
+          "worker.heartbeat.frequency.secs" : "1",
+          "topology.max.error.report.per.interval" : "5",
+          "nimbus.thrift.max_buffer_size" : "1048576",
+          "topology.metrics.metric.name.separator" : "."
+        }
+      }
+    },
+    {
+      "ranger-storm-plugin-properties" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "storm-atlas-application.properties" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "atlas.hook.storm.numRetries" : "3"
+        }
+      }
+    },
+    {
+      "zookeeper-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "zk_log_dir" : "/var/log/zookeeper",
+          "zk_user" : "zookeeper",
+          "zk_pid_dir" : "/var/run/zookeeper",
+          "content" : "\nexport JAVA_HOME={{java64_home}}\nexport ZOOKEEPER_HOME={{zk_home}}\nexport ZOO_LOG_DIR={{zk_log_dir}}\nexport ZOOPIDFILE={{zk_pid_file}}\nexport SERVER_JVMFLAGS={{zk_server_heapsize}}\nexport JAVA=$JAVA_HOME/bin/java\nexport CLASSPATH=$CLASSPATH:/usr/share/zookeeper/*\n\n{% if security_enabled %}\nexport SERVER_JVMFLAGS=\"$SERVER_JVMFLAGS -Djava.security.auth.login.config={{zk_server_jaas_file}}\"\nexport CLIENT_JVMFLAGS=\"$CLIENT_JVMFLAGS -Djava.security.auth.login.config={{zk_client_jaas_file}}\"\n{% endif %}"
+        }
+      }
+    },
+    {
+      "ranger-kafka-security" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "cluster-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "recovery_max_count" : "6",
+          "manage_dirs_on_root" : "true",
+          "managed_hdfs_resource_property_names" : "",
+          "recovery_retry_interval" : "5",
+          "stack_features" : "{\n  \"stack_features\": [\n    {\n      \"name\": \"snappy\",\n      \"description\": \"Snappy compressor/decompressor support\",\n      \"min_version\": \"2.0.0.0\",\n      \"max_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"lzo\",\n      \"description\": \"LZO libraries support\",\n      \"min_version\": \"2.2.1.0\"\n    },\n    {\n      \"name\": \"express_upgrade\",\n      \"description\": \"Express upgrade support\",\n      \"min_version\": \"2.1.0.0\"\n    },\n    {\n      \"name\": \"rolling_upgrade\",\n      \"description\": \"Rolling upgrade support\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"config_versioning\",\n      \"description\": \"Configurable versions support\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"datanode_non_root\",\n      \"description\": \"DataNode running as non-root support (AMBARI-7615)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"remove_ranger_hdfs_plugin_env\",\n      \"description\": \"HDFS removes Ranger env files (AMBARI-14299)\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"ranger\",\n      \"description\": \"Ranger Service support\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"ranger_tagsync_component\",\n      \"description\": \"Ranger Tagsync component support (AMBARI-14383)\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"phoenix\",\n      \"description\": \"Phoenix Service support\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"nfs\",\n      \"description\": \"NFS support\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"tez_for_spark\",\n      \"description\": \"Tez dependency for Spark\",\n      \"min_version\": \"2.2.0.0\",\n      \"max_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"timeline_state_store\",\n      \"description\": \"Yarn application timeline-service supports state store property (AMBARI-11442)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"copy_tarball_to_hdfs\",\n      \"description\": \"Copy tarball to HDFS support (AMBARI-12113)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"spark_16plus\",\n      \"description\": \"Spark 1.6+\",\n      \"min_version\": \"2.4.0.0\"\n    },\n    {\n      \"name\": \"spark_thriftserver\",\n      \"description\": \"Spark Thrift Server\",\n      \"min_version\": \"2.3.2.0\"\n    },\n    {\n      \"name\": \"storm_kerberos\",\n      \"description\": \"Storm Kerberos support (AMBARI-7570)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"storm_ams\",\n      \"description\": \"Storm AMS integration (AMBARI-10710)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"create_kafka_broker_id\",\n      \"description\": \"Ambari should create Kafka Broker Id (AMBARI-12678)\",\n      \"min_version\": \"2.2.0.0\",\n      \"max_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"kafka_listeners\",\n      \"description\": \"Kafka listeners (AMBARI-10984)\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"kafka_kerberos\",\n      \"description\": \"Kafka Kerberos support (AMBARI-10984)\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"pig_on_tez\",\n      \"description\": \"Pig on Tez support (AMBARI-7863)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"ranger_usersync_non_root\",\n      \"description\": \"Ranger Usersync as non-root user (AMBARI-10416)\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"ranger_audit_db_support\",\n      \"description\": \"Ranger Audit to DB support\",\n      \"min_version\": \"2.2.0.0\",\n      \"max_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"accumulo_kerberos_user_auth\",\n      \"description\": \"Accumulo Kerberos User Auth (AMBARI-10163)\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"knox_versioned_data_dir\",\n      \"description\": \"Use versioned data dir for Knox (AMBARI-13164)\",\n      \"min_version\": \"2.3.2.0\"\n    },\n    {\n      \"name\": \"knox_sso_topology\",\n      \"description\": \"Knox SSO Topology support (AMBARI-13975)\",\n      \"min_version\": \"2.3.8.0\"\n    },\n    {\n      \"name\": \"atlas_rolling_upgrade\",\n      \"description\": \"Rolling upgrade support for Atlas\",\n      \"min_version\": \"2.3.0.0\"\n    },\n    {\n      \"name\": \"oozie_admin_user\",\n      \"description\": \"Oozie install user as an Oozie admin user (AMBARI-7976)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"oozie_create_hive_tez_configs\",\n      \"description\": \"Oozie create configs for Ambari Hive and Tez deployments (AMBARI-8074)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"oozie_setup_shared_lib\",\n      \"description\": \"Oozie setup tools used to shared Oozie lib to HDFS (AMBARI-7240)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"oozie_host_kerberos\",\n      \"description\": \"Oozie in secured clusters uses _HOST in Kerberos principal (AMBARI-9775)\",\n      \"min_version\": \"2.0.0.0\",\n      \"max_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"falcon_extensions\",\n      \"description\": \"Falcon Extension\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"hive_metastore_upgrade_schema\",\n      \"description\": \"Hive metastore upgrade schema support (AMBARI-11176)\",\n      \"min_version\": \"2.3.0.0\"\n     },\n    {\n      \"name\": \"hive_server_interactive\",\n      \"description\": \"Hive server interactive support (AMBARI-15573)\",\n      \"min_version\": \"2.5.0.0\"\n     },\n    {\n      \"name\": \"hive_webhcat_specific_configs\",\n      \"description\": \"Hive webhcat specific configurations support (AMBARI-12364)\",\n      \"min_version\": \"2.3.0.0\"\n     },\n    {\n      \"name\": \"hive_purge_table\",\n      \"description\": \"Hive purge table support (AMBARI-12260)\",\n      \"min_version\": \"2.3.0.0\"\n     },\n    {\n      \"name\": \"hive_server2_kerberized_env\",\n      \"description\": \"Hive server2 working on kerberized environment (AMBARI-13749)\",\n      \"min_version\": \"2.2.3.0\",\n      \"max_version\": \"2.2.5.0\"\n     },\n    {\n      \"name\": \"hive_env_heapsize\",\n      \"description\": \"Hive heapsize property defined in hive-env (AMBARI-12801)\",\n      \"min_version\": \"2.2.0.0\"\n    },\n    {\n      \"name\": \"ranger_kms_hsm_support\",\n      \"description\": \"Ranger KMS HSM support (AMBARI-15752)\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_log4j_support\",\n      \"description\": \"Ranger supporting log-4j properties (AMBARI-15681)\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_kerberos_support\",\n      \"description\": \"Ranger Kerberos support\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"hive_metastore_site_support\",\n      \"description\": \"Hive Metastore site support\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_usersync_password_jceks\",\n      \"description\": \"Saving Ranger Usersync credentials in jceks\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_install_infra_client\",\n      \"description\": \"Ambari Infra Service support\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"falcon_atlas_support_2_3\",\n      \"description\": \"Falcon Atlas integration support for 2.3 stack\",\n      \"min_version\": \"2.3.99.0\",\n      \"max_version\": \"2.4.0.0\"\n    },\n    {\n      \"name\": \"falcon_atlas_support\",\n      \"description\": \"Falcon Atlas integration\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"hbase_home_directory\",\n      \"description\": \"Hbase home directory in HDFS needed for HBASE backup\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"spark_livy\",\n      \"description\": \"Livy as slave component of spark\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"atlas_ranger_plugin_support\",\n      \"description\": \"Atlas Ranger plugin support\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"atlas_conf_dir_in_path\",\n      \"description\": \"Prepend the Atlas conf dir (/etc/atlas/conf) to the classpath of Storm and Falcon\",\n      \"min_version\": \"2.3.0.0\",\n      \"max_version\": \"2.4.99.99\"\n    },\n    {\n      \"name\": \"atlas_upgrade_support\",\n      \"description\": \"Atlas supports express and rolling upgrades\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"atlas_hook_support\",\n      \"description\": \"Atlas support for hooks in Hive, Storm, Falcon, and Sqoop\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_pid_support\",\n      \"description\": \"Ranger Service support pid generation AMBARI-16756\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_kms_pid_support\",\n      \"description\": \"Ranger KMS Service support pid generation\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"ranger_admin_password_change\",\n      \"description\": \"Allow ranger admin credentials to be specified during cluster creation (AMBARI-17000)\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"storm_metrics_apache_classes\",\n      \"description\": \"Metrics sink for Storm that uses Apache class names\",\n      \"min_version\": \"2.5.0.0\"\n    },\n    {\n      \"name\": \"spark_java_opts_support\",\n      \"description\": \"Allow Spark to generate java-opts file\",\n      \"min_version\": \"2.2.0.0\",\n      \"max_version\": \"2.4.0.0\"\n    },\n    {\n      \"name\": \"atlas_hbase_setup\",\n      \"description\": \"Use script to create Atlas tables in Hbase and set permissions for Atlas user.\",\n      \"min_version\": \"2.5.0.0\"\n    }\n  ]\n}",
+          "stack_tools" : "{\n  \"stack_selector\": [\"hdp-select\", \"/usr/bin/hdp-select\", \"hdp-select\"],\n  \"conf_selector\": [\"conf-select\", \"/usr/bin/conf-select\", \"conf-select\"]\n}",
+          "repo_ubuntu_template" : "{{package_type}} {{base_url}} {{components}}",
+          "stack_root" : "/usr/hdp",
+          "fetch_nonlocal_groups" : "true",
+          "one_dir_per_partition" : "false",
+          "kerberos_domain" : "EXAMPLE.COM",
+          "ignore_bad_mounts" : "false",
+          "user_group" : "hadoop",
+          "override_uid" : "true",
+          "security_enabled" : "false",
+          "recovery_lifetime_max_count" : "1024",
+          "recovery_type" : "AUTO_START",
+          "repo_suse_rhel_template" : "[{{repo_id}}]\nname={{repo_id}}\n{% if mirror_list %}mirrorlist={{mirror_list}}{% else %}baseurl={{base_url}}{% endif %}\n\npath=/\nenabled=1\ngpgcheck=0",
+          "recovery_enabled" : "true",
+          "smokeuser" : "ambari-qa",
+          "smokeuser_keytab" : "/etc/security/keytabs/smokeuser.headless.keytab",
+          "alerts_repeat_tolerance" : "1",
+          "recovery_window_in_minutes" : "60",
+          "ignore_groupsusers_create" : "false"
+        }
+      }
+    },
+    {
+      "ranger-storm-policymgr-ssl" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    },
+    {
+      "ams-grafana-env" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "metrics_grafana_log_dir" : "/var/log/ambari-metrics-grafana",
+          "metrics_grafana_pid_dir" : "/var/run/ambari-metrics-grafana",
+          "content" : "\n# Set environment variables here.\n\n# AMS UI Server Home Dir\nexport AMS_GRAFANA_HOME_DIR={{ams_grafana_home_dir}}\n\n# AMS UI Server Data Dir\nexport AMS_GRAFANA_DATA_DIR={{ams_grafana_data_dir}}\n\n# AMS UI Server Log Dir\nexport AMS_GRAFANA_LOG_DIR={{ams_grafana_log_dir}}\n\n# AMS UI Server PID Dir\nexport AMS_GRAFANA_PID_DIR={{ams_grafana_pid_dir}}",
+          "metrics_grafana_data_dir" : "/var/lib/ambari-metrics-grafana",
+          "metrics_grafana_username" : "admin"
+        }
+      }
+    },
+    {
+      "ranger-storm-security" : {
+        "properties_attributes" : { },
+        "properties" : { }
+      }
+    }
+  ],
+  "host_groups" : [
+    {
+      "components" : [
+        {
+          "name" : "KAFKA_BROKER"
+        },
+        {
+          "name" : "ZOOKEEPER_SERVER"
+        },
+        {
+          "name" : "STORM_UI_SERVER"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "SUPERVISOR"
+        },
+        {
+          "name" : "NIMBUS"
+        },
+        {
+          "name" : "DRPC_SERVER"
+        },
+        {
+          "name" : "ZOOKEEPER_CLIENT"
+        },
+        {
+          "name" : "METRICS_COLLECTOR"
+        },
+        {
+          "name" : "METRICS_GRAFANA"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_1",
+      "cardinality" : "1"
+    }
+  ],
+  "Blueprints" : {
+    "stack_name" : "HDP",
+    "stack_version" : "2.5"
+  }
+}
