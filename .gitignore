@@ -8,3 +8,4 @@ log
 logs
 .env
 demo/
+src/
