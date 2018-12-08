@@ -1,12 +1,13 @@
-version: '2'
+version: '3.3'
 
 services:
   app:
-    image: haskell:latest
+    #image: haskell:latest
+    image: gibiansky/ihaskell:latest
     volumes:
-       - ~/share/docker:/share
+       - ./src:/notebooks
     ports:
-      - '6060:6060'
+      - '8888:8888'
     tty: true
 
 volumes:
