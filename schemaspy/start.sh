@@ -1,0 +1,2 @@
+#docker-compose run --rm --service-ports app  -t pgsql -db mydbase -host myserver -port myport -u user -p passwordocker-compose run --rm --service-ports app  -t pgsql -db mydbase -host myserver -port myport -u user -p password
+docker-compose run --rm --service-ports app  -t pgsql -db mydbase -host myserver -port myport -u user -p passwordocker-compose run --rm --service-ports app  -t pgsql -db mydbase -host myserver -port myport -u user -p password
