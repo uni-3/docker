@@ -1,0 +1,11 @@
+versions: '3.3'
+services:
+  app:
+    image: schemaspy/schemaspy:latest
+
+    volumes:
+      - ./drivers:/drivers
+      - ./output:/output
+      - ./config:/config
+    # http://schemaspy.readthedocs.io/en/latest/started.html
+    command: ["-t pgsql -db mydbase -host myserver -port myport -u user -p password"]
