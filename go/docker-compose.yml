@@ -1,16 +1,15 @@
-version: '2'
+version: "2"
 
 services:
   app:
-    image: 'golang:1.9'
+    image: "golang:1.13"
     volumes:
-       - ~/share/docker:/go/share
+      - ~/share/docker:/go/share
     ports:
-      - '8080:8080'
+      - "8080:8080"
     tty: true
     #command: 'go run main.go'
 
 volumes:
   data:
-    driver: 'local'
-
+    driver: "local"
