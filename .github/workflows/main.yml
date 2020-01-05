@@ -1,0 +1,29 @@
+name: py build and push
+on:
+  push:
+    branches:
+      - master
+      - develop
+    paths:
+      - 'python/**'
+jobs:
+  check-version:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - name: Build and push Docker image
+        run: docker version
+
+  publish-image:
+    #needs: package
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+    - name: Build image and Publish to Github Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: py-analytics
+        username: uni-3
+        password: ${{ secrets.GITHUB_PKG_TOKEN}}
+        registry: docker.pkg.github.com
+        context: python
