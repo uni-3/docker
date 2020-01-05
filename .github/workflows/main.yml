@@ -6,6 +6,7 @@ on:
       - develop
     paths:
       - 'python/**'
+      - '.github/workflows/**'
 jobs:
   check-version:
     runs-on: ubuntu-18.04
@@ -24,7 +25,7 @@ jobs:
       with:
         name: uni-3/py-analytics
         username: uni-3
-        password: ${{ secrets.GITHUB_PKG_TOKEN}}
+        password: ${{secrets.GITHUB_PKG_TOKEN}}
         registry: docker.pkg.github.com
         context: python
         tag-names: latest
