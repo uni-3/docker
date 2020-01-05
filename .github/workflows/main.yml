@@ -22,8 +22,9 @@ jobs:
     - name: Build image and Publish to Github Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: py-analytics
+        name: uni-3/py-analytics
         username: uni-3
         password: ${{ secrets.GITHUB_PKG_TOKEN}}
         registry: docker.pkg.github.com
         context: python
+        tag-names: latest
