@@ -24,7 +24,7 @@ jobs:
       with:
         name: ${{secrets.DOCKERHUB_USER}}/python-analytics
         username: ${{secrets.DOCKERHUB_USER}}
-        username: ${{secrets.DOCKERHUB_PASS}}
+        password: ${{secrets.DOCKERHUB_PASS}}
         #registry: docker.pkg.github.com
         context: python
         tag-names: latest
