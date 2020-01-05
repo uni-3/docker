@@ -16,16 +16,15 @@ jobs:
         run: docker version
 
   publish-image:
-    #needs: package
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@master
     - name: Build image and Publish to Github Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: uni-3/docker/py-analytics
-        username: uni-3
-        password: ${{secrets.GITHUB_PKG_TOKEN}}
-        registry: docker.pkg.github.com
+        name: ${{secrets.DOCKERHUB_USER}}/python-analytics
+        username: ${{secrets.DOCKERHUB_USER}}
+        username: ${{secrets.DOCKERHUB_PASS}}
+        #registry: docker.pkg.github.com
         context: python
         tag-names: latest
