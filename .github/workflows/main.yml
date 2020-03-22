@@ -1,0 +1,30 @@
+name: py build and push
+on:
+  push:
+    branches:
+      - master
+      - develop
+    paths:
+      - 'python/**'
+      - '.github/workflows/**'
+jobs:
+  check-version:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - name: Build and push Docker image
+        run: docker version
+
+  publish-image:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+    - name: Build image and Publish to Github Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ${{secrets.DOCKERHUB_USER}}/python-analytics
+        username: ${{secrets.DOCKERHUB_USER}}
+        password: ${{secrets.DOCKERHUB_PASS}}
+        #registry: docker.pkg.github.com
+        context: python
+        tag-names: latest
