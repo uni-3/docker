@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build image and Publish to Github Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: elgohr/Publish-Docker-Github-Action@v5
       with:
         name: ${{secrets.DOCKERHUB_USER}}/python-analytics
         username: ${{secrets.DOCKERHUB_USER}}
